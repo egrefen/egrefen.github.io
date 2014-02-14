@@ -2,7 +2,7 @@ body {
 	padding-top: 100px;
     font-family: 'Open Sans', sans-serif;
   	text-align: justify;
-	background-color: #002147;
+	background-color: #3C3E5C;
 }
 	
 
@@ -16,4 +16,8 @@ h1 {
 
 .panel-heading {
 	font-weight: bold;
+}
+
+footer {
+	color: white;
 }
