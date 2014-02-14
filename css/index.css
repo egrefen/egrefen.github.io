@@ -10,6 +10,10 @@ h1 {
 	font-family: 'Dosis', sans-serif;
 }
 
-.panel {
+.panel-default {
 	border-radius: 10px;
+}
+
+.panel-heading {
+	font-weight: bold;
 }
