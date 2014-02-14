@@ -1,0 +1,15 @@
+body {
+	padding-top: 100px;
+    font-family: 'Open Sans', sans-serif;
+  	text-align: justify;
+	background-color: #002147;
+}
+	
+
+h1 {
+	font-family: 'Dosis', sans-serif;
+}
+
+.panel {
+	border-radius: 10px;
+}
