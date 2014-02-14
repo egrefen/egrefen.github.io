@@ -21,7 +21,7 @@ h1 {
 
 .panel-default {
 	border-radius: 10px;
-	border: 100px;
+	border: 1px solid gray;
 	background-color: rgba(255, 255, 255, 0.85);
 }
 
