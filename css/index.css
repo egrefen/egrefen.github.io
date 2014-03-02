@@ -19,6 +19,18 @@ h1 {
 	font-family: 'Dosis', sans-serif;
 }
 
+h2 {
+  font-family: 'Dosis', sans-serif;
+}
+
+h3 {
+  font-family: 'Dosis', sans-serif;
+}
+
+h4 {
+  font-family: 'Dosis', sans-serif;
+}
+
 .panel-default {
 	border-radius: 10px;
 	border: 1px solid gray;
@@ -27,4 +39,8 @@ h1 {
 
 .panel-heading {
 	font-weight: bold;
+}
+
+#news ul { 
+  font-size: 12px;
 }
