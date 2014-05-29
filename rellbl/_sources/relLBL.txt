@@ -1,0 +1,10 @@
+Model
+======
+
+Code
+----
+
+.. automodule :: relLBL.relLBL
+
+.. autoclass:: relLBL.relLBL.Model
+   :members: __init__

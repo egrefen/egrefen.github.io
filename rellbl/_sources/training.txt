@@ -1,0 +1,57 @@
+Training
+========
+
+Model parameters and definitions
+--------------------------------
+
+Each query tuple has the form :math:`(rel, ent, dir)`, where:
+
+* `rel` is a relation (e.g. president-of.r),
+* `ent` is an entity (e.g. united-states.e),
+* `dir` is a direct (left or right).
+
+For example, the tuple (president-of.r, united-states.e, right) would stand for the query '(president-of.r, ?, united-states.e)'.
+
+Some key parameters (not necessarily explicitly needed):
+
+* :math:`d`: The embedding dimensionality.
+* :math:`D`: The number of rows in the dataset (or minibatch).
+* :math:`V_{rel}`: The size of the relation vocabulary.
+* :math:`C_{rel}`: The number of classes for the factorised relation vocabulary. We want :math:`C_{rel} \approx \sqrt{V_{rel}}`.
+* :math:`c_{rel}`: The *maximum* number of relations per class. We also want :math:`c_{rel} \approx \sqrt{V_{rel}}`.
+* :math:`V_{ent}`: The size of the entity vocabulary.
+* :math:`C_{ent}`: The number of classes for the factorised relation vocabulary. We want :math:`C_{ent} \approx \sqrt{V_{ent}}`.
+* :math:`c_{ent}`: The *maximum* number of relations per class. We also want :math:`c_{ent} \approx \sqrt{V_{ent}}`.
+
+Data structures format
+----------------------
+
+* Training data (:math:`data`): A :math:`D \times 3` matrix, where each row :math:`data_i` has as elements:
+
+   - :math:`data_i[0]`: the word index of a relation (in its respective class),
+   - :math:`data_i[1]`: the word index of an entity (in its respective class),
+   - :math:`data_i[2]`: the index of the direction (0 for left, 1 for right).
+
+* Training data class (:math:`classes`): A :math:`D \times 2` matrix, where each row :math:`class_i` has as elements:
+   - :math:`classes_i[0]`: the class index of a relation,
+   - :math:`classes_i[1]`: the class index of an entity.
+
+* Training betas (:math:`betas`): A :math:`D \times d` matrix, where each row :math:`betas_i` is the embedding for a question aligned with the query tuple represented by :math:`data_i` and :math:`classes_i`.
+
+* Relation vocab tensor (:math:`vocab_{rel}`): A :math:`C_{rel} \times c_{rel} \times d` tensor, where :math:`vocab_{rel}[i,j,:]` is the embedding for the :math:`j`-th relation in the :math:`i`-th class. In other words, :math:`vocab_{rel}[i]` is the :math:`c_{rel} \times d` vocabulary matrix for the relations in class :math:`i`.
+
+* Entity vocab tensor (:math:`vocab_{ent}`): A :math:`C_{ent} \times c_{ent} \times d` tensor, where :math:`vocab_{ent}[i,j,:]` is the embedding for the :math:`j`-th entity in the :math:`i`-th class. In other words, :math:`vocab_{ent}[i]` is the :math:`c_{ent} \times d` vocabulary matrix for the entities in class :math:`i`.
+
+* Relation unigram log-probability matrix (:math:`probs_{rel}`): A :math:`C_{rel} \times c_{rel}` matrix, where :math:`probs_{rel}[i,j]` is the log_probability in ReVerb of the :math:`j`-th relation of the :math:`i`-th class.
+
+* Entity unigram log-probability matrix (:math:`probs_{ent}`): A :math:`C_{ent} \times c_{ent}` matrix, where :math:`probs_{ent}[i,j]` is the log_probability in ReVerb of the :math:`j`-th entity of the :math:`i`-th class.
+
+* Relation class log-probabilities (:math:`classprobs_{rel}`): A :math:`C_{rel}`-dimensional vector, where :math:`C_{rel}[i]` is the log-probability of the :math:`i`-th relation class.
+
+* Entity class log-probabilities (:math:`classprobs_{ent}`): A :math:`C_{ent}`-dimensional vector, where :math:`C_{ent}[i]` is the log-probability of the :math:`i`-th entity class.
+
+Classes and functions
+---------------------
+
+.. automodule:: rellbl.training
+   :members:

@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Utilities &mdash; relLBL 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="relLBL 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Training" href="training.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="training.html" title="Training"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">relLBL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="utilities">
+<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-rellbl.utilities">
+<span id="classes-and-functions"></span><h2>Classes and functions<a class="headerlink" href="#module-rellbl.utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="rellbl.utilities.load_data">
+<tt class="descclassname">rellbl.utilities.</tt><tt class="descname">load_data</tt><big>(</big><em>source</em>, <em>type=&lt;type 'int'&gt;</em><big>)</big><a class="headerlink" href="#rellbl.utilities.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads array-like data from text file into numpy array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> (<em>string</em>) &#8211; Path to data text file.</li>
+<li><strong>type</strong> (<em>type</em>) &#8211; Type of the data in text file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rellbl.utilities.prep_gpu_data">
+<tt class="descclassname">rellbl.utilities.</tt><tt class="descname">prep_gpu_data</tt><big>(</big><em>data</em>, <em>borrow=True</em>, <em>int_cast=False</em>, <em>name=None</em><big>)</big><a class="headerlink" href="#rellbl.utilities.prep_gpu_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Puts input array in shared theano variable, casting if necessary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>Numeric array-like</em>) &#8211; Array of data to be used.</li>
+<li><strong>borrow</strong> (<em>bool</em>) &#8211; borrow parameter for theano.shared</li>
+<li><strong>int_cast</strong> (<em>bool</em>) &#8211; Theano shared variable will be tensor.cast to int32 if true.,</li>
+<li><strong>name</strong> (<em>string</em>) &#8211; Name of object variable.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rellbl.utilities.random_mat">
+<tt class="descclassname">rellbl.utilities.</tt><tt class="descname">random_mat</tt><big>(</big><em>dim1</em>, <em>dim2=None</em>, <em>spread=2</em><big>)</big><a class="headerlink" href="#rellbl.utilities.random_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dim1</strong> (<em>int</em>) &#8211; Number of rows.</li>
+<li><strong>dim2</strong> (<em>int</em>) &#8211; Number of columns (dim1 used if not specified).</li>
+<li><strong>spread</strong> (<em>int or float</em>) &#8211; Values of matrix are bounded by +/- the spread.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rellbl.utilities.random_vec">
+<tt class="descclassname">rellbl.utilities.</tt><tt class="descname">random_vec</tt><big>(</big><em>dim</em>, <em>spread=2</em><big>)</big><a class="headerlink" href="#rellbl.utilities.random_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dim</strong> (<em>int</em>) &#8211; Dimensions of vector.</li>
+<li><strong>spread</strong> (<em>int or float</em>) &#8211; Values of vector are bounded by +/- the spread.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Utilities</a><ul>
+<li><a class="reference internal" href="#module-rellbl.utilities">Classes and functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="training.html"
+                        title="previous chapter">Training</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/utilities.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="training.html" title="Training"
+             >previous</a> |</li>
+        <li><a href="index.html">relLBL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Edward Grefenstette.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

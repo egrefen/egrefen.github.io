@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Training &mdash; relLBL 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="relLBL 0.1 documentation" href="index.html" />
+    <link rel="next" title="Utilities" href="utilities.html" />
+    <link rel="prev" title="Models" href="models.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utilities.html" title="Utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="Models"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">relLBL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="training">
+<h1>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="model-parameters-and-definitions">
+<h2>Model parameters and definitions<a class="headerlink" href="#model-parameters-and-definitions" title="Permalink to this headline">¶</a></h2>
+<p>Each query tuple has the form <span class="math">\((rel, ent, dir)\)</span>, where:</p>
+<ul class="simple">
+<li><cite>rel</cite> is a relation (e.g. president-of.r),</li>
+<li><cite>ent</cite> is an entity (e.g. united-states.e),</li>
+<li><cite>dir</cite> is a direct (left or right).</li>
+</ul>
+<p>For example, the tuple (president-of.r, united-states.e, right) would stand for the query &#8216;(president-of.r, ?, united-states.e)&#8217;.</p>
+<p>Some key parameters (not necessarily explicitly needed):</p>
+<ul class="simple">
+<li><span class="math">\(d\)</span>: The embedding dimensionality.</li>
+<li><span class="math">\(D\)</span>: The number of rows in the dataset (or minibatch).</li>
+<li><span class="math">\(V_{rel}\)</span>: The size of the relation vocabulary.</li>
+<li><span class="math">\(C_{rel}\)</span>: The number of classes for the factorised relation vocabulary. We want <span class="math">\(C_{rel} \approx \sqrt{V_{rel}}\)</span>.</li>
+<li><span class="math">\(c_{rel}\)</span>: The <em>maximum</em> number of relations per class. We also want <span class="math">\(c_{rel} \approx \sqrt{V_{rel}}\)</span>.</li>
+<li><span class="math">\(V_{ent}\)</span>: The size of the entity vocabulary.</li>
+<li><span class="math">\(C_{ent}\)</span>: The number of classes for the factorised relation vocabulary. We want <span class="math">\(C_{ent} \approx \sqrt{V_{ent}}\)</span>.</li>
+<li><span class="math">\(c_{ent}\)</span>: The <em>maximum</em> number of relations per class. We also want <span class="math">\(c_{ent} \approx \sqrt{V_{ent}}\)</span>.</li>
+</ul>
+</div>
+<div class="section" id="data-structures-format">
+<h2>Data structures format<a class="headerlink" href="#data-structures-format" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Training data (<span class="math">\(data\)</span>): A <span class="math">\(D \times 3\)</span> matrix, where each row <span class="math">\(data_i\)</span> has as elements:</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(data_i[0]\)</span>: the word index of a relation (in its respective class),</li>
+<li><span class="math">\(data_i[1]\)</span>: the word index of an entity (in its respective class),</li>
+<li><span class="math">\(data_i[2]\)</span>: the index of the direction (0 for left, 1 for right).</li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Training data class (<span class="math">\(classes\)</span>): A <span class="math">\(D \times 2\)</span> matrix, where each row <span class="math">\(class_i\)</span> has as elements:</dt>
+<dd><ul class="first last simple">
+<li><span class="math">\(classes_i[0]\)</span>: the class index of a relation,</li>
+<li><span class="math">\(classes_i[1]\)</span>: the class index of an entity.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Training betas (<span class="math">\(betas\)</span>): A <span class="math">\(D \times d\)</span> matrix, where each row <span class="math">\(betas_i\)</span> is the embedding for a question aligned with the query tuple represented by <span class="math">\(data_i\)</span> and <span class="math">\(classes_i\)</span>.</p>
+</li>
+<li><p class="first">Relation vocab tensor (<span class="math">\(vocab_{rel}\)</span>): A <span class="math">\(C_{rel} \times c_{rel} \times d\)</span> tensor, where <span class="math">\(vocab_{rel}[i,j,:]\)</span> is the embedding for the <span class="math">\(j\)</span>-th relation in the <span class="math">\(i\)</span>-th class. In other words, <span class="math">\(vocab_{rel}[i]\)</span> is the <span class="math">\(c_{rel} \times d\)</span> vocabulary matrix for the relations in class <span class="math">\(i\)</span>.</p>
+</li>
+<li><p class="first">Entity vocab tensor (<span class="math">\(vocab_{ent}\)</span>): A <span class="math">\(C_{ent} \times c_{ent} \times d\)</span> tensor, where <span class="math">\(vocab_{ent}[i,j,:]\)</span> is the embedding for the <span class="math">\(j\)</span>-th entity in the <span class="math">\(i\)</span>-th class. In other words, <span class="math">\(vocab_{ent}[i]\)</span> is the <span class="math">\(c_{ent} \times d\)</span> vocabulary matrix for the entities in class <span class="math">\(i\)</span>.</p>
+</li>
+<li><p class="first">Relation unigram log-probability matrix (<span class="math">\(probs_{rel}\)</span>): A <span class="math">\(C_{rel} \times c_{rel}\)</span> matrix, where <span class="math">\(probs_{rel}[i,j]\)</span> is the log_probability in ReVerb of the <span class="math">\(j\)</span>-th relation of the <span class="math">\(i\)</span>-th class.</p>
+</li>
+<li><p class="first">Entity unigram log-probability matrix (<span class="math">\(probs_{ent}\)</span>): A <span class="math">\(C_{ent} \times c_{ent}\)</span> matrix, where <span class="math">\(probs_{ent}[i,j]\)</span> is the log_probability in ReVerb of the <span class="math">\(j\)</span>-th entity of the <span class="math">\(i\)</span>-th class.</p>
+</li>
+<li><p class="first">Relation class log-probabilities (<span class="math">\(classprobs_{rel}\)</span>): A <span class="math">\(C_{rel}\)</span>-dimensional vector, where <span class="math">\(C_{rel}[i]\)</span> is the log-probability of the <span class="math">\(i\)</span>-th relation class.</p>
+</li>
+<li><p class="first">Entity class log-probabilities (<span class="math">\(classprobs_{ent}\)</span>): A <span class="math">\(C_{ent}\)</span>-dimensional vector, where <span class="math">\(C_{ent}[i]\)</span> is the log-probability of the <span class="math">\(i\)</span>-th entity class.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="module-rellbl.training">
+<span id="classes-and-functions"></span><h2>Classes and functions<a class="headerlink" href="#module-rellbl.training" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="rellbl.training.train_naive_factorized_generator">
+<tt class="descclassname">rellbl.training.</tt><tt class="descname">train_naive_factorized_generator</tt><big>(</big><em>learning_rate</em>, <em>epochs</em>, <em>batch_size</em>, <em>train_data_in</em>, <em>train_classes_in</em>, <em>train_betas</em>, <em>rel_vocab</em>, <em>ent_vocab</em>, <em>rel_unigram_probs</em>, <em>ent_unigram_probs</em>, <em>rel_class_probs</em>, <em>ent_class_probs</em>, <em>save_folder</em>, <em>l2=0</em>, <em>shuffle=True</em><big>)</big><a class="headerlink" href="#rellbl.training.train_naive_factorized_generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train a factorized relLBL with SGD.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>learning_rate</strong> (<em>float</em>) &#8211; Learning rate for SGD.</li>
+<li><strong>epochs</strong> (<em>int</em>) &#8211; Number of epochs to train for.</li>
+<li><strong>batch_size</strong> (<em>int</em>) &#8211; Batch size for SGD minibatches.</li>
+<li><strong>train_data_in</strong> (<em>numpy.ndarray</em>) &#8211; Matrix (<span class="math">\(data\)</span>) containing the training data.</li>
+<li><strong>train_classes_in</strong> (<em>numpy.ndarray</em>) &#8211; Matrix (<span class="math">\(classes\)</span>) containing the training data classes.</li>
+<li><strong>train_betas</strong> (<em>numpy.ndarray</em>) &#8211; Matrix (<span class="math">\(betas\)</span>) of training betas.</li>
+<li><strong>rel_vocab</strong> (<em>numpy.ndarray</em>) &#8211; Factorized vocabulary embedding tensor (<span class="math">\(vocab_{rel}\)</span>) for relations.</li>
+<li><strong>ent_vocab</strong> (<em>numpy.ndarray</em>) &#8211; Factorized vocabulary embedding tensor (<span class="math">\(vocab_{ent}\)</span>) for entities.</li>
+<li><strong>rel_unigram_probs</strong> (<em>numpy.ndarray</em>) &#8211; Matrix (<span class="math">\(probs_{rel}\)</span>) of relation unigram log-probabilities (one row per class).</li>
+<li><strong>ent_unigram_probs</strong> (<em>numpy.ndarray</em>) &#8211; Matrix (<span class="math">\(probs_{ent}\)</span>) of entity unigram log-probabilities (one row per class).</li>
+<li><strong>rel_class_probs</strong> (<em>numpy.ndarray</em>) &#8211; Vector (<span class="math">\(classprobs_{rel}\)</span>) of relation class log-probabilities.</li>
+<li><strong>ent_class_probs</strong> (<em>numpy.ndarray</em>) &#8211; Vector (<span class="math">\(classprobs_{ent}\)</span>) of entity class log-probabilities.</li>
+<li><strong>save_folder</strong> (<em>string</em>) &#8211; Path to folder where models should be saved.</li>
+<li><strong>l2</strong> (<em>float</em>) &#8211; Lambda parameter for L2 regularisation.</li>
+<li><strong>shuffle</strong> (<em>bool</em>) &#8211; If True, shuffle data before start of training.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Training</a><ul>
+<li><a class="reference internal" href="#model-parameters-and-definitions">Model parameters and definitions</a></li>
+<li><a class="reference internal" href="#data-structures-format">Data structures format</a></li>
+<li><a class="reference internal" href="#module-rellbl.training">Classes and functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="models.html"
+                        title="previous chapter">Models</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="utilities.html"
+                        title="next chapter">Utilities</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/training.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utilities.html" title="Utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="Models"
+             >previous</a> |</li>
+        <li><a href="index.html">relLBL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Edward Grefenstette.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

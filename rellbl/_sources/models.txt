@@ -1,0 +1,10 @@
+Models
+======
+
+Classes and functions
+---------------------
+
+.. automodule :: rellbl.models
+
+.. autoclass:: rellbl.models.NaiveFactorizedGenerator
+   :members:

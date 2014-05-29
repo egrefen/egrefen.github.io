@@ -1,0 +1,8 @@
+DataIO
+======
+
+Classes and functions
+---------------------
+
+.. automodule:: rellbl.dataIO
+   :members:
